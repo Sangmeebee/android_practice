@@ -5,5 +5,5 @@ data class Post(
     val id: Int,
     val title: String,
     val userId: Int,
-    val comments: List<Comment>?
+    var comments: List<Comment>?
 )

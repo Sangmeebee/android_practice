@@ -33,7 +33,7 @@ class RecyclerAdapter : RecyclerView.Adapter<RecyclerAdapter.RecyclerViewHolder>
 
     fun updatePost(post: Post) {
         with(posts.indexOf(post)) {
-            posts.add(this, post)
+            posts[this] = post
             notifyItemChanged(this)
         }
     }
@@ -49,7 +49,7 @@ class RecyclerAdapter : RecyclerView.Adapter<RecyclerAdapter.RecyclerViewHolder>
                     ""
                 } else {
                     showProgressBar(false)
-                    post.comments.size.toString()
+                    post.comments?.size.toString()
                 }
             }
         }
