@@ -1,5 +1,31 @@
 # RxJava - 연산자
 
+- Data Set을 관찰가능하게 만들어주거나, 변환, 필터, 합성등 추가적인 작업을 할 수 있다.
+
+## Create Operators 
+
+### create()
+
+- 하나의 객채만 가져와서 관찬가능한 객체로 만들어 주는 연산자
+
+- input : T
+
+- output : Observable<T>
+
+- Emitter(발행자)를 이용하여 직접 아이템을 발행하고, 아이템 발행의 완료나 오류(Complete/Error)의 알림을 직접 설정할 수 있다.
+
+  ~~~kotlin
+  Observable<String> observable = Observable.create( emitter -> {
+  	emitter.onNext("hi")
+  	emitter.onNext("my name is Sangmin")
+  	emitter.onComplete()  
+  })
+  ~~~
+
+  
+
+ fromIterable(), fromArray(), just(), range(), repeat()...
+
 ### Buffer
 
 - 데이터를 바로 전달하지 않고 buffer size 만큼 모일 때 까지 기다렸다가 한 번에 List 형태로 전달하는 operator
