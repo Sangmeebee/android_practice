@@ -32,22 +32,49 @@
 
 - 개념
   - 데이터의 흐름을 관장하는 클래스
-  - **backPressure**를 지원
-- backPressure 이란?
-  - 옵저버에게 너무 많은 데이터를 내보내고 옵저버가 처리 할 수없는 경우 **메모리 부족 예외**가 발생할 수 있다.
-  - **Hot Source**
-    - Observable은 Observer가 따라 잡을 수 있는지 여부에 관계없이 계속해서 데이터를 Observer쪽으로 **Push**한다.
-    - Observable은 객체를 방출하며 이를 따라 잡는 것은 Observer에게 달려 있습니다.
-  - **Cold Source**
-    - Hot Source와 반대 개념
-    - 방출 된 데이터는 전체 프로세스가 기본적으로 Observer의 재량에 있기 때문에 **버퍼링 할 필요가 없다.**
-    - **Observer가 원할 때** Observable에서 데이터를 가져온다.
-  - **Backpressure Strategies**
-    - **onBackpressureBuffer()** : 무제한 버퍼 (JVM에 메모리가 부족하지 않는 한 모든 데이터 처리)
-    - 다른 전략들 존재
-- Observabler과 차이
-  - backPressure를 지원 (Observable은 지원하지 않음)
-  - subscribe 쪽에서 일처리가 늦어진다면 publish를 더이상 진행하지 않고 기다렸다가 진행한다.하지만 Observable은 신경쓰지 않고 데이터를 계속 생성하여 전달하고 소비자 쪽에서는 묵묵히 이 일을 처리해야함으로 너무 큰 데이터 스트림이 들어왔을 때 메모리 부족 예외 발생 가능성이 있다.
+  - **backPressure** 현상을 스스로 제어
+  
+- **backPressure(배압)** 이란?
 
+  - 생산과 소비가 불균형적일 때 일어나는 현상
+  - Observable이 데이터를 발행하는 속도를 Observer의 소비 속도가 따라가지 못하는 경우 결국 메모리가 overflow되고 OutOfMemoryExeption으로 이어진다. 이러한 현상을 backPressure라고 한다.
 
+- **Flowable VS Observable**
+  
+  - Observable이 backPressure 현상을 제어하지 못했다면 Flowable은 이러한 현상을 스스로 제어할 수 있다.
+  - `Observable`을 사용한 경우에는 데이터 발행과 소비가 균형적으로 일어나지 않으며 데이터는 소비와 상관없이 스트림에 계속 쌓이게 된다. (OOME 발생 가능성 있다.)
+  - `Flowable`을 사용한 경우에는 데이터가 일정량 누적되면 데이터를 더이상 발행하지 않고 기다렸다가 다시 발행한다.
+  - Observable 사용하는 경우
+    - 1,000개 미만의 데이터 흐름이 발생하는 경우
+    - 적은 데이터 소스만을 활용하여 OutOfMemoryException이 발생할 확률이 적은 경우
+    - 마우스 이벤트나 터치 이벤트와 같은 GUI 프로그래밍을 하는 경우
+    - Java Streams을 지원하지 않는 경우
+  - Flowable 사용하는 경우
+    - 10,000개 이상의 데이터 흐름이 발생하는 경우
+    - 디스크에서 파일을 읽는 경우
+    - 데이터베이스를 읽는 경우
+    - 네트워크 IO 실행 시
+  
+- **BackPressure Strategy (배압 전략)**
+
+  - Flowable에도 배압을 제어하지 못해 **MissingBackpressureException**이 발생할 수 있는 예외상황이 존재
+
+    - Flowable과 interval()을 같이 사용하는 경우, interval 연산자는 스케줄러와 관계없이 시간에 의존해 데이터를 발행하므로 에러가 발생
+
+  - Flowable에 배압 전략을 명시함으로써 배압을 제어할 수 있다.
+
+  - <img src="/Users/sangmee/Library/Application Support/typora-user-images/스크린샷 2021-04-28 오전 2.58.19.png" alt="스크린샷 2021-04-28 오전 2.58.19" style="zoom:33%;" />
+
+  - ~~~kotlin
+    Flowable.create(emitter ->{
+                   	for(i in 1..10000)emitter.onNext(i)
+                    emitter.onComplete()
+    }, BackPressureStrategy.DROP)
+    ~~~
+
+- 배압 제어 연산자
+
+  - onBackPressureBuffer()
+  - onBackPressureDrop()
+  - onBackPressureLatest()
 
