@@ -72,7 +72,7 @@ class MainActivity : AppCompatActivity() {
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .flatMap {
-                adapter.setPosts(it)
+                adapter.submitList(it)
                 Observable.fromIterable(it)
                     .subscribeOn(Schedulers.io())
             }
