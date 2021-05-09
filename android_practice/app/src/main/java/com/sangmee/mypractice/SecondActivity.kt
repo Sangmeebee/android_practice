@@ -14,7 +14,7 @@ class SecondActivity : AppCompatActivity() {
         binding = ActivitySecondBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val post = intent.getSerializableExtra("post") as Post
+        val post = intent.getParcelableExtra<Post>("post")
         Log.d(TAG, post.toString())
     }
 

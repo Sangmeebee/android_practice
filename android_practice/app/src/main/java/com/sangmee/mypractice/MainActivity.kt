@@ -13,7 +13,6 @@ import io.reactivex.rxjava3.core.Observer
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.disposables.Disposable
 import io.reactivex.rxjava3.schedulers.Schedulers
-import java.io.Serializable
 import kotlin.random.Random
 
 class MainActivity : AppCompatActivity(), RecyclerAdapter.OnItemClickListener {
@@ -86,8 +85,8 @@ class MainActivity : AppCompatActivity(), RecyclerAdapter.OnItemClickListener {
         }
     }
 
-    override fun onClick(post : Post) {
-        startActivity(Intent(this, SecondActivity::class.java).putExtra("post", post as Serializable))
+    override fun onClick(post: Post) {
+        startActivity(Intent(this, SecondActivity::class.java).putExtra("post", post))
     }
 
     override fun onDestroy() {
