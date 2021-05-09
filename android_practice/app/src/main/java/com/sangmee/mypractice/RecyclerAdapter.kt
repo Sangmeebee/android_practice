@@ -5,9 +5,10 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.sangmee.mypractice.databinding.LayoutPostListItemBinding
-import com.sangmee.rxjavapractice.models.Post
+import com.sangmee.mypractice.models.Post
 
-class RecyclerAdapter : RecyclerView.Adapter<RecyclerAdapter.RecyclerViewHolder>() {
+class RecyclerAdapter(private val onItemClickListener: OnItemClickListener) :
+    RecyclerView.Adapter<RecyclerAdapter.RecyclerViewHolder>() {
 
     private var posts = ArrayList<Post>()
     private lateinit var binding: LayoutPostListItemBinding
@@ -16,7 +17,11 @@ class RecyclerAdapter : RecyclerView.Adapter<RecyclerAdapter.RecyclerViewHolder>
         binding =
             LayoutPostListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
 
-        return RecyclerViewHolder(binding)
+        val viewHolder = RecyclerViewHolder(binding)
+        binding.root.setOnClickListener {
+            onItemClickListener.onClick(posts[viewHolder.absoluteAdapterPosition])
+        }
+        return viewHolder
     }
 
     override fun getItemCount(): Int = posts.size
@@ -57,6 +62,10 @@ class RecyclerAdapter : RecyclerView.Adapter<RecyclerAdapter.RecyclerViewHolder>
         private fun showProgressBar(showProgressBar: Boolean) {
             binding.pb.isVisible = showProgressBar
         }
+    }
+
+    interface OnItemClickListener {
+        fun onClick(post: Post)
     }
 
     companion object {

@@ -1,4 +1,6 @@
-package com.sangmee.rxjavapractice.models
+package com.sangmee.mypractice.models
+
+import java.io.Serializable
 
 data class Comment(
     val body: String,
@@ -6,4 +8,4 @@ data class Comment(
     val id: Int,
     val name: String,
     val postId: Int
-)
+) : Serializable
