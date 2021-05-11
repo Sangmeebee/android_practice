@@ -1,4 +1,4 @@
-package com.sangmee.rxjavapractice.requests
+package com.sangmee.mypractice.service
 
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory
@@ -16,6 +16,5 @@ object ServiceGenerator {
     private val retrofit = retrofitBuilder.build()
     private val requestApi = retrofit.create(RequestApi::class.java)
 
-    fun getRequestApi() =
-        requestApi
+    fun getRequestApi() = requestApi
 }

@@ -1,4 +1,4 @@
-package com.sangmee.rxjavapractice.requests
+package com.sangmee.mypractice.service
 
 import com.sangmee.mypractice.models.Comment
 import com.sangmee.mypractice.models.Post
