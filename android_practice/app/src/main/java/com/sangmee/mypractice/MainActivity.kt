@@ -62,10 +62,6 @@ class MainActivity : AppCompatActivity(), RecyclerAdapter.OnItemClickListener {
         super.onDestroy()
     }
 
-    companion object {
-        private const val TAG = "MainActivity"
-    }
-
     class MainViewModelFactory(private val repository: PostRepository) : ViewModelProvider.Factory {
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
             return if (modelClass.isAssignableFrom(MainViewModel::class.java)) {
@@ -74,5 +70,9 @@ class MainActivity : AppCompatActivity(), RecyclerAdapter.OnItemClickListener {
                 throw IllegalArgumentException()
             }
         }
+    }
+
+    companion object {
+        private const val TAG = "MainActivity"
     }
 }

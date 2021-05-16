@@ -35,7 +35,7 @@ class MainViewModel(private val repository: PostRepository) : ViewModel() {
             }.addTo(disposables)
     }
 
-    //comment를 불러와서 post에 추가
+    //comment를 불러와서 post update
     private fun getCommentsObservable(post: Post): Observable<Post> {
         return repository.getComments(post.id)
             .map {
@@ -48,7 +48,7 @@ class MainViewModel(private val repository: PostRepository) : ViewModel() {
     }
 
 
-    //post를 불러
+    //post list 불러오기
     private fun getPostsObservable(): Observable<Post> {
         return repository.getPosts()
             .subscribeOn(Schedulers.io())

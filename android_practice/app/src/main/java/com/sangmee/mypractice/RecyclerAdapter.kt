@@ -18,11 +18,11 @@ class RecyclerAdapter(private val onItemClickListener: OnItemClickListener) :
         binding =
             LayoutPostListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
 
-        val viewHolder = RecyclerViewHolder(binding)
-        binding.root.setOnClickListener {
-            onItemClickListener.onClick(posts[viewHolder.absoluteAdapterPosition])
+        return RecyclerViewHolder(binding).apply {
+            binding.root.setOnClickListener {
+                onItemClickListener.onClick(posts[this.absoluteAdapterPosition])
+            }
         }
-        return viewHolder
     }
 
     override fun getItemCount(): Int = posts.size
@@ -32,7 +32,7 @@ class RecyclerAdapter(private val onItemClickListener: OnItemClickListener) :
     }
 
     fun submitList(newPosts: List<Post>) {
-        val oldList = posts
+        val oldList = posts.toList()
         val diffResult: DiffUtil.DiffResult =
             DiffUtil.calculateDiff(RecyclerDiffUtil(oldList, newPosts))
         posts.clear()
@@ -42,16 +42,18 @@ class RecyclerAdapter(private val onItemClickListener: OnItemClickListener) :
 
     class RecyclerDiffUtil(private val oldList: List<Post>, private val newList: List<Post>) :
         DiffUtil.Callback() {
-        override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean =
-            oldList[oldItemPosition].id == newList[newItemPosition].id
+        override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+            return oldList[oldItemPosition].id == newList[newItemPosition].id
+        }
 
         override fun getOldListSize() = oldList.size
 
-
         override fun getNewListSize() = newList.size
 
-        override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int) =
-            oldList[oldItemPosition] == newList[newItemPosition]
+        override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+            return oldList[oldItemPosition].comments == newList[newItemPosition].comments
+        }
+
     }
 
     class RecyclerViewHolder(private val binding: LayoutPostListItemBinding) :
