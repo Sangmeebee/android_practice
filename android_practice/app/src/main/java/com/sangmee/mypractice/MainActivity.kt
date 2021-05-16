@@ -53,7 +53,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun updatePost(post: Post) {
-        adapter.updatePost(post)
+        val oldList = adapter.posts.toMutableList()
+        with(oldList.indexOf(post)){
+            oldList[this] = post
+            adapter.submitList(oldList)
+        }
     }
 
     private fun getCommentsObservable(post: Post) =

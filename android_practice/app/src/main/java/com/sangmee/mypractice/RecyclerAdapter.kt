@@ -10,7 +10,7 @@ import com.sangmee.rxjavapractice.models.Post
 
 class RecyclerAdapter : RecyclerView.Adapter<RecyclerAdapter.RecyclerViewHolder>() {
 
-    private var posts = mutableListOf<Post>()
+    var posts = mutableListOf<Post>()
     private lateinit var binding: LayoutPostListItemBinding
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerViewHolder {
@@ -32,18 +32,6 @@ class RecyclerAdapter : RecyclerView.Adapter<RecyclerAdapter.RecyclerViewHolder>
             DiffUtil.calculateDiff(RecyclerDiffUtil(oldList, newPosts))
         posts.clear()
         posts.addAll(newPosts)
-        diffResult.dispatchUpdatesTo(this)
-    }
-
-    fun updatePost(post: Post) {
-        val oldList = posts
-        val newList = posts as ArrayList
-        with(newList.indexOf(post)) {
-            newList[this] = post
-        }
-        val diffResult: DiffUtil.DiffResult =
-            DiffUtil.calculateDiff(RecyclerDiffUtil(oldList, newList))
-        this.posts = newList
         diffResult.dispatchUpdatesTo(this)
     }
 
