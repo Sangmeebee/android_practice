@@ -3,6 +3,7 @@ package com.sangmee.mypractice
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.view.isVisible
+import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.sangmee.mypractice.databinding.LayoutPostListItemBinding
@@ -11,8 +12,14 @@ import com.sangmee.mypractice.models.Post
 class RecyclerAdapter(private val onItemClickListener: OnItemClickListener) :
     RecyclerView.Adapter<RecyclerAdapter.RecyclerViewHolder>() {
 
-    var posts = mutableListOf<Post>()
     private lateinit var binding: LayoutPostListItemBinding
+    private val diffUtil = AsyncListDiffer(this, PostDiffUtilCallback())
+
+    fun submitList(newPosts: List<Post>) = diffUtil.submitList(newPosts)
+
+    private fun getItem(position: Int) = diffUtil.currentList[position]
+
+    fun getItems(): MutableList<Post> = diffUtil.currentList
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerViewHolder {
         binding =
@@ -20,40 +27,25 @@ class RecyclerAdapter(private val onItemClickListener: OnItemClickListener) :
 
         return RecyclerViewHolder(binding).apply {
             binding.root.setOnClickListener {
-                onItemClickListener.onClick(posts[this.absoluteAdapterPosition])
+                onItemClickListener.onClick(getItem(this.absoluteAdapterPosition))
             }
         }
     }
 
-    override fun getItemCount(): Int = posts.size
+    override fun getItemCount(): Int = diffUtil.currentList.size
 
     override fun onBindViewHolder(holder: RecyclerViewHolder, position: Int) {
-        holder.bind(posts[position])
+        holder.bind(getItem(position))
     }
 
-    fun submitList(newPosts: List<Post>) {
-        val oldList = posts.toList()
-        val diffResult: DiffUtil.DiffResult =
-            DiffUtil.calculateDiff(RecyclerDiffUtil(oldList, newPosts))
-        posts.clear()
-        posts.addAll(newPosts)
-        diffResult.dispatchUpdatesTo(this)
-    }
-
-    class RecyclerDiffUtil(private val oldList: List<Post>, private val newList: List<Post>) :
-        DiffUtil.Callback() {
-        override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-            return oldList[oldItemPosition].id == newList[newItemPosition].id
+    class PostDiffUtilCallback : DiffUtil.ItemCallback<Post>() {
+        override fun areItemsTheSame(oldItem: Post, newItem: Post): Boolean {
+            return oldItem.id == newItem.id
         }
 
-        override fun getOldListSize() = oldList.size
-
-        override fun getNewListSize() = newList.size
-
-        override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-            return oldList[oldItemPosition].comments == newList[newItemPosition].comments
+        override fun areContentsTheSame(oldItem: Post, newItem: Post): Boolean {
+            return oldItem == newItem
         }
-
     }
 
     class RecyclerViewHolder(private val binding: LayoutPostListItemBinding) :
