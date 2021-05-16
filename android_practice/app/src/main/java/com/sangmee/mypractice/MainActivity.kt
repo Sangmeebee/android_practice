@@ -34,14 +34,17 @@ class MainActivity : AppCompatActivity(), RecyclerAdapter.OnItemClickListener {
 
     private fun initViewModel() {
 
-        vm.postsData.observe(this) { adapter.setPosts(it) }
+        vm.postsData.observe(this) { adapter.submitList(it) }
         vm.postData.observe(this) { updatePost(it) }
     }
 
     private fun updatePost(post: Post) {
-        adapter.updatePost(post)
+        val oldList = adapter.posts.toMutableList()
+        with(oldList.indexOf(post)) {
+            oldList[this] = post
+            adapter.submitList(oldList)
+        }
     }
-
 
     private fun initRecyclerView() {
         binding.rvPostList.apply {
