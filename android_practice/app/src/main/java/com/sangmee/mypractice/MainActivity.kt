@@ -2,7 +2,6 @@ package com.sangmee.mypractice
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -40,7 +39,7 @@ class MainActivity : AppCompatActivity(), RecyclerAdapter.OnItemClickListener {
     }
 
     private fun updatePost(post: Post) {
-        val oldList = adapter.getItems().toMutableList()
+        val oldList = adapter.currentList.toMutableList()
         with(oldList.indexOf(post)) {
             oldList[this] = post
             adapter.submitList(oldList)
