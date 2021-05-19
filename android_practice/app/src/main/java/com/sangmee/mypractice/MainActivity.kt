@@ -2,30 +2,28 @@ package com.sangmee.mypractice
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.sangmee.mypractice.databinding.ActivityMainBinding
 import com.sangmee.mypractice.models.Post
-import com.sangmee.mypractice.models.dataSource.PostRemoteDataSourceImpl
-import com.sangmee.mypractice.models.repository.PostRepository
-import com.sangmee.mypractice.models.repository.PostRepositoryImpl
+import com.sangmee.mypractice.viewmodel.ViewModelFactory
+import dagger.android.support.DaggerAppCompatActivity
+import javax.inject.Inject
 
-class MainActivity : AppCompatActivity(), RecyclerAdapter.OnItemClickListener {
+class MainActivity : DaggerAppCompatActivity(), RecyclerAdapter.OnItemClickListener {
 
     private val adapter by lazy { RecyclerAdapter(this) }
     private lateinit var binding: ActivityMainBinding
     private lateinit var vm: MainViewModel
+
+    @Inject
+    lateinit var viewModelFactory: ViewModelFactory
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        vm = ViewModelProvider(
-            this,
-            MainViewModelFactory(PostRepositoryImpl(PostRemoteDataSourceImpl()))
-        ).get(MainViewModel::class.java)
+        vm = ViewModelProvider(this, viewModelFactory).get(MainViewModel::class.java)
 
         initViewModel()
         initRecyclerView()
@@ -60,16 +58,6 @@ class MainActivity : AppCompatActivity(), RecyclerAdapter.OnItemClickListener {
     override fun onDestroy() {
         vm.unBindViewModel()
         super.onDestroy()
-    }
-
-    class MainViewModelFactory(private val repository: PostRepository) : ViewModelProvider.Factory {
-        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            return if (modelClass.isAssignableFrom(MainViewModel::class.java)) {
-                MainViewModel(repository) as T
-            } else {
-                throw IllegalArgumentException()
-            }
-        }
     }
 
     companion object {

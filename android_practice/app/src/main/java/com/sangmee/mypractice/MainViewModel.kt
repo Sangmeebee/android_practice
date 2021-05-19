@@ -10,9 +10,10 @@ import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.kotlin.addTo
 import io.reactivex.rxjava3.schedulers.Schedulers
+import javax.inject.Inject
 import kotlin.random.Random
 
-class MainViewModel(private val repository: PostRepository) : ViewModel() {
+class MainViewModel @Inject constructor(private val repository: PostRepository) : ViewModel() {
 
     private val disposables = CompositeDisposable()
     private val _postData = MutableLiveData<Post>()
