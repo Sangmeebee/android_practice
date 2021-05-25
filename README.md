@@ -8,6 +8,6 @@
 - [Serializable / Parcelize](https://github.com/Sangmeebee/android_practice/blob/main/documents/parcelable/serializable:parcelable.md)
 - [dagger2](https://github.com/Sangmeebee/android_practice/blob/main/documents/di/dagger2.md)
 - customView
-- Room
-- clean architecture
+- [Room](https://github.com/Sangmeebee/android_practice/blob/main/documents/Room)
+- [clean architecture](https://github.com/Sangmeebee/android_practice/blob/main/documents/cleanArchitecture/Clean%20Architecture.md)
 
