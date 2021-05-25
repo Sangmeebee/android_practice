@@ -1,8 +1,12 @@
 package com.sangmee.mypractice.di.main
 
+import android.app.Application
 import androidx.lifecycle.ViewModel
 import com.sangmee.mypractice.MainViewModel
+import com.sangmee.mypractice.database.LocalDatabase
 import com.sangmee.mypractice.di.scope.ActivityScope
+import com.sangmee.mypractice.models.dataSource.PostLocalDataSource
+import com.sangmee.mypractice.models.dataSource.PostLocalDataSourceImpl
 import com.sangmee.mypractice.models.dataSource.PostRemoteDataSource
 import com.sangmee.mypractice.models.dataSource.PostRemoteDataSourceImpl
 import com.sangmee.mypractice.models.repository.PostRepository
@@ -37,9 +41,21 @@ class MainModule {
 
     @ActivityScope
     @Provides
+    fun providePostLocalDataSource(postLocalDataSourceImpl: PostLocalDataSourceImpl): PostLocalDataSource {
+        return postLocalDataSourceImpl
+    }
+
+    @ActivityScope
+    @Provides
     @IntoMap
     @ViewModelKey(MainViewModel::class)
     fun provideMainViewModel(postRepository: PostRepository): ViewModel {
         return MainViewModel(postRepository)
+    }
+
+    @ActivityScope
+    @Provides
+    fun provideLocalDatabase(application: Application): LocalDatabase {
+        return LocalDatabase.getInstance(application)!!
     }
 }
