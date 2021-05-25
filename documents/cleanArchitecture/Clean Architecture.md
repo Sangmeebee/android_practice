@@ -21,11 +21,10 @@
 
 - 재사용성 / 가독성 / 유지보수를 위해 사용
 - 변화에 잘 대응 하기 위한 코드 설계 방법 (변화가 일어나는 곳에서만 코드의 변화가 일어나야한다. SRP)
-- 
 
 ### 기본적인 개념
 
-![스크린샷 2021-05-25 오후 7.58.39](/Users/sangmee/Library/Application Support/typora-user-images/스크린샷 2021-05-25 오후 7.58.39.png)
+![클린아키텍처](./clean_architecture.png)
 
 - MVC에서 Model을 분해 - Domain Layer + Data Layer
 - Presentation Layer의 **Presenter** (사용자에게 보여지는 로직과 관련) 와 Domain Layer의 **UseCase**로 비즈니스 로직 나누어서 처리
